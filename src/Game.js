@@ -10,16 +10,41 @@ brainVita.Game.prototype = {
 	    this.board=[];
 	    this.marbles=[];
 	    brainVita.countMarble=0;
-	
+	    this.iPos=0;
+	    this.jPos=0;
+	    this.mySeconds = 0; 
+        this.myMinutes = 0;
+        this.undoMove=0;
+	  
 		this.createBoard();
 		this.addMarbles();
+		this.timerText = this.game.add.text(380, 20, '0:0' + this.mySeconds,this._fontStyle);
+        this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
+		
 
 		
 	},
+	updateCounter: function() {
+     this.mySeconds++;
+     this.myMinutes =Math.floor(this.mySeconds/ 60);
+     if (this.mySeconds < 10){
+   	    this.timerText.setText( this.myMinutes + ':'+ '0' + this.mySeconds);
+     }
+     else
+    {
+   	this.timerText.setText( this.myMinutes + ':' + this.mySeconds);
+ 	}
+},
 
 	createBoard: function(){
 		this.add.sprite(0, 0, 'background');
-		this.add.sprite(0, 0, 'board');
+		this.add.sprite(80, 30, 'board');
+		this.add.sprite(300, 0, 'Timer');
+		this.undoBtn=this.add.button(30, -4, 'Undo-icon', this.undo, this);
+		this.add.button(633, 0, 'pause_icon', this.managePause, this);
+		this.add.button(700, 0, 'cross_icon', this.close, this);
+		//this.undoBtn.inputEnabled=true;
+	
 		for(i=0; i<7; i++){
 				this.board[i] = new Array(7);
 				for(j=0; j<7; j++){
@@ -46,7 +71,7 @@ brainVita.Game.prototype = {
 
 				if(this.board[i][j]==1)
 				{
-				 this.marbles[i][j]=this.add.sprite(60+j*70,50+i*72,'marble');
+				 this.marbles[i][j]=this.add.sprite((80+60)+j*70,(30+50)+i*72,'marble');
 	            }
 				  
             }
@@ -86,14 +111,17 @@ brainVita.Game.prototype = {
         },
 
         onDragStop : function(sprite,pointer) {
-            var iIndex = sprite.iIndex;
-            var jIndex = sprite.jIndex;
-            var update = 0;
+        	this.undoBtn.inputEnabled=true;
+             var iIndex = sprite.iIndex;
+             var jIndex = sprite.jIndex;
+              this.iPos=iIndex;
+	          this.jPos=jIndex;
+              var update = 0;
             
             
 		    if (iIndex+2<=6 && this.board[iIndex+2][jIndex]==0 && 
 		    	this.board[iIndex+1][jIndex]==1) {
-                                                    var bounds = new Phaser.Rectangle(30+jIndex*70,25+(iIndex+2)*72,80,80);
+                                                    var bounds = new Phaser.Rectangle((80+30)+jIndex*70,(25+30)+(iIndex+2)*72,80,80);
                                                      
 		    	                                         if (sprite.x>bounds.left && sprite.x<bounds.right &&
 		    	                                             sprite.y>bounds.top && sprite.y<bounds.bottom) {
@@ -103,8 +131,9 @@ brainVita.Game.prototype = {
 				 	                                        this.board[iIndex][jIndex]=0; 
 				 	                                        this.marbles[iIndex+1][jIndex].kill();  
 				 	                                        this.marbles[iIndex][jIndex].kill();        	
-				 	                                    	this.marbles[iIndex+2][jIndex]=this.add.sprite(60+jIndex*70,50+(iIndex+2)*72,'marble');
+				 	                                    	this.marbles[iIndex+2][jIndex]=this.add.sprite((80+60)+jIndex*70,(50+30)+(iIndex+2)*72,'marble');
 				 	                                        update++;
+				 	                                        this.undoMove=1;
 				 	                                      } 
 				 	                                     
 				 	                                      
@@ -113,7 +142,7 @@ brainVita.Game.prototype = {
 		
 	 	                                  
 		 if (jIndex+2<=6 && this.board[iIndex][jIndex+2]==0 && this.board[iIndex][jIndex+1]==1) {
-		    	                                         var bounds = new Phaser.Rectangle(30+(jIndex+2)*70,25+iIndex*72,80,80);
+		    	                                         var bounds = new Phaser.Rectangle((80+60)+(jIndex+2)*70,(25+30)+iIndex*72,80,80);
                                                      
 		    	                                         if (sprite.x>bounds.left && sprite.x<bounds.right &&
 		    	                                             sprite.y>bounds.top && sprite.y<bounds.bottom) {
@@ -124,15 +153,16 @@ brainVita.Game.prototype = {
 				 	                                      this.board[iIndex][jIndex]=0; 
 				 	                                      this.marbles[iIndex][jIndex].kill(); 
 				 		                                  this.marbles[iIndex][jIndex+1].kill();
-				 		                                  this.marbles[iIndex][jIndex+2]=this.add.sprite(60+(jIndex+2)*70,50+iIndex*72,'marble');
+				 		                                  this.marbles[iIndex][jIndex+2]=this.add.sprite((80+60)+(jIndex+2)*70,(50+30)+iIndex*72,'marble');
 				 	                                      update++;
+				 	                                      this.undoMove=2;
 				 	                                     } 
 				 	                                    
 				 	                                    }
 				 	                                
 		 	                                
 	     if (iIndex-2>=0 && this.board[iIndex-2][jIndex]==0 && this.board[iIndex-1][jIndex]==1) { 
-				                                      var bounds = new Phaser.Rectangle(30+jIndex*70,25+(iIndex-2)*72,80,80);
+				                                      var bounds = new Phaser.Rectangle((30+80)+jIndex*70,(25+30)+(iIndex-2)*72,80,80);
                                                      
 		    	                                         if (sprite.x>bounds.left && sprite.x<bounds.right &&
 		    	                                             sprite.y>bounds.top && sprite.y<bounds.bottom) {
@@ -142,8 +172,9 @@ brainVita.Game.prototype = {
 				 	                                      this.board[iIndex][jIndex]=0; 
 				 	                                      this.marbles[iIndex][jIndex].kill();
 				 		                                  this.marbles[iIndex-1][jIndex].kill();
-				 		                                  this.marbles[iIndex-2][jIndex]=this.add.sprite(60+jIndex*70,50+(iIndex-2)*72,'marble');
+				 		                                  this.marbles[iIndex-2][jIndex]=this.add.sprite((60+80)+jIndex*70,(50+30)+(iIndex-2)*72,'marble');
 				 	                                     update++;
+				 	                                     this.undoMove=3;
 				 	                                     }
 
 				 	    
@@ -152,7 +183,7 @@ brainVita.Game.prototype = {
 		
 				 	                                
 		 if (jIndex-2>=0 && this.board[iIndex][jIndex-2]==0  && this.board[iIndex][jIndex-1]==1) {
-				                                    var bounds = new Phaser.Rectangle(30+(jIndex-2)*70,25+iIndex*72,80,80);
+				                                    var bounds = new Phaser.Rectangle((80+30)+(jIndex-2)*70,(25+30)+iIndex*72,80,80);
                                                      
 		    	                                         if (sprite.x>bounds.left && sprite.x<bounds.right &&
 		    	                                             sprite.y>bounds.top && sprite.y<bounds.bottom) {
@@ -163,15 +194,16 @@ brainVita.Game.prototype = {
 				 	                                     this.board[iIndex][jIndex]=0; 
 				 	                                     this.marbles[iIndex][jIndex].kill(); 
 				 		                                 this.marbles[iIndex][jIndex-1].kill();
-				 		                                 this.marbles[iIndex][jIndex-2]=this.add.sprite(60+(jIndex-2)*70,50+iIndex*72,'marble');
+				 		                                 this.marbles[iIndex][jIndex-2]=this.add.sprite((80+60)+(jIndex-2)*70,(50+30)+iIndex*72,'marble');
 				 	                                     update++;
+				 	                                     this.undoMove=4;
 				 	                                     } 
 				 	                                    
 				 	                                    }
 			if (update==0) {
-	             	sprite.reset(60+jIndex*70,50+iIndex*72);	 	                           
+	             	sprite.reset((80+60)+jIndex*70,(50+30)+iIndex*72);	 	                           
 			} 	                                    
-				 	                                
+			this.inputEnabled	 	                                
 			this.renderBoard(this.marbles);				 
         },
 
@@ -272,8 +304,86 @@ brainVita.Game.prototype = {
 			}
                this.state.start('finalscreen');
 			}
-		}
+		},
+           
+        undo:function()
+        {
+        	if(this.undoMove==1)
+        	{
+        		  this.board[this.iPos+2][this.jPos]=0;
+				  this.board[this.iPos+1][this.jPos]=1;
+				  this.board[this.iPos][this.jPos]=1;
+				  this.marbles[this.iPos+2][this.jPos].kill();
+				  this.marbles[this.iPos+1][this.jPos]=this.add.sprite((80+60)+this.jPos*70,(50+30)+(this.iPos+1)*72,'marble');
+				  this.marbles[this.iPos][this.jPos]=this.add.sprite((60+80)+this.jPos*70,(50+30)+(this.iPos)*72,'marble');
 
+
+        	}
+        	
+        	if(this.undoMove==2)
+        	{
+        		 this.board[this.iPos][this.jPos+2]=0;
+				 this.board[this.iPos][this.jPos+1]=1;
+				 this.board[this.iPos][this.jPos]=1; 
+				 this.marbles[this.iPos][this.jPos+2].kill();
+				 this.marbles[this.iPos][this.jPos+1]=this.add.sprite((60+80)+(this.jPos+1)*70,(50+30)+(this.iPos)*72,'marble');
+				 this.marbles[this.iPos][this.jPos]=this.add.sprite((80+60)+this.jPos*70,(50+30)+(this.iPos)*72,'marble');
+
+        	}
+
+        	if(this.undoMove==3)
+        	{
+
+			    this.board[this.iPos-2][this.jPos]=0;
+				this.board[this.iPos-1][this.jPos]=1; 
+	            this.board[this.iPos][this.jPos]=1;
+	            this.marbles[this.iPos-2][this.jPos].kill();
+				this.marbles[this.iPos-1][this.jPos]=this.add.sprite((60+80)+this.jPos*70,(50+30)+(this.iPos-1)*72,'marble');
+				this.marbles[this.iPos][this.jPos]=this.add.sprite((60+80)+this.jPos*70,(50+30)+(this.iPos)*72,'marble');
+ 
+        	}
+        	
+        	if (this.undoMove==4)
+        	{
+        		 this.board[this.iPos][this.jPos-2]=0; 
+				 this.board[this.iPos][this.jPos-1]=1;
+				 this.board[this.iPos][this.jPos]=1;
+				 this.marbles[this.iPos][this.jPos-2].kill();
+				 this.marbles[this.iPos][this.jPos-1]=this.add.sprite((60+80)+(this.jPos-1)*70,(50+30)+(this.iPos)*72,'marble');
+				 this.marbles[this.iPos][this.jPos]=this.add.sprite((60+80)+this.jPos*70,(50+30)+(this.iPos)*72,'marble');
+ 
+        	}
+        	this.undoBtn.inputEnabled=false;
+        	this.renderBoard(this.marbles);
+        },
+
+        managePause: function(){
+        // pause the game
+        this.game.paused = true;
+        var graphicOverlay = new Phaser.Graphics(this.game, 0 , 0);
+        graphicOverlay.beginFill(0x000000, 0.3);
+        graphicOverlay.drawRect(0,0, 800, 600);
+        graphicOverlay.endFill();
+        this.overlay = this.game.add.image(-10,-10,graphicOverlay.generateTexture());
+        this.overlay.inputEnabled = true;
+        // add proper informational text
+        pausedText = this.add.text(this.world.centerX,250, "Game paused.\nTap anywhere to continue.", this._fontStyle1);
+        pausedText.anchor.setTo(0.5, 0.5);
+        // set event listener for the user's click/tap the screen
+        this.input.onDown.add(function(){
+            // remove the pause text
+            pausedText.destroy();
+            // unpause the game
+            this.game.paused = false;
+            this.overlay.destroy();
+        }, this);
+    },
+
+    close:function()
+    {
+    	this.state.start('MainMenu');
+    }
+        
 
 };
 
