@@ -42,7 +42,7 @@ brainVita.Game.prototype = {
 		this.add.sprite(0, 0, 'background');
 		this.add.sprite(80, 30, 'board');
 		this.add.sprite(334, 10, 'Timer');
-		this.undoBtn=this.add.button(6, 5, 'Undo-icon', this.undo, this);
+		this.undoBtn=this.add.button(6, 5, 'Undo', this.undo, this);
 		this.add.button(683, 1, 'pause_icon', this.managePause, this);
 		this.add.button(736, -1, 'cross_icon', this.close, this);
 		//this.undoBtn.inputEnabled=true;
@@ -137,6 +137,7 @@ brainVita.Game.prototype = {
 				 	                                        update++;
 				 	                                        this.undoMove=1;
 				 	                                        this.undoBtn.inputEnabled=true;
+				 	                                        this.undoBtn.visible=true;
 				 	                                      } 
 				 	                                     
 				 	                                      
@@ -160,6 +161,7 @@ brainVita.Game.prototype = {
 				 	                                      update++;
 				 	                                      this.undoMove=2;
 				 	                                      this.undoBtn.inputEnabled=true;
+				 	                                      this.undoBtn.visible=true;
 				 	                                     } 
 				 	                                    
 				 	                                    }
@@ -180,6 +182,7 @@ brainVita.Game.prototype = {
 				 	                                     update++;
 				 	                                     this.undoMove=3;
 				 	                                     this.undoBtn.inputEnabled=true;
+				 	                                     this.undoBtn.visible=true;
 				 	                                     }
 
 				 	    
@@ -203,12 +206,14 @@ brainVita.Game.prototype = {
 				 	                                     update++;
 				 	                                     this.undoMove=4;
 				 	                                     this.undoBtn.inputEnabled=true;
+				 	                                     this.undoBtn.visible=true;
 				 	                                     } 
 				 	                                    
 				 	                                    }
 			if (update==0) {
 	             	sprite.reset((80+60)+jIndex*70,(50+30)+iIndex*72);
-	             	this.undoBtn.inputEnabled=false;	 	                           
+	             	this.undoBtn.inputEnabled=false;
+	             	this.undoBtn.visible=false;	 	                           
 			} 	                                    
 			 	                                
 			this.renderBoard(this.marbles);				 
@@ -361,6 +366,7 @@ brainVita.Game.prototype = {
  
         	}
         	this.undoBtn.inputEnabled=false;
+        	this.undoBtn.visible=false;
         	this.renderBoard(this.marbles);
         },
 
