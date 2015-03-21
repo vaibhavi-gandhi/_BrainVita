@@ -15,18 +15,20 @@ brainVita.Game.prototype = {
 	    this.mySeconds = 0; 
         this.myMinutes = 0;
         this.undoMove=0;
+        this.Seconds=0;
 	  
 		this.createBoard();
 		this.addMarbles();
-		this.timerText = this.game.add.text(380, 20, '0:0' + this.mySeconds,this._fontStyle);
+		this.timerText = this.game.add.text(400, 15, '0:0' + this.mySeconds,this._fontStyle);
         this.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
 		
 
 		
 	},
 	updateCounter: function() {
-     this.mySeconds++;
-     this.myMinutes =Math.floor(this.mySeconds/ 60);
+     this.Seconds++;
+     this.myMinutes =Math.floor(this.Seconds/ 60);
+     this.mySeconds=this.Seconds%60;
      if (this.mySeconds < 10){
    	    this.timerText.setText( this.myMinutes + ':'+ '0' + this.mySeconds);
      }
@@ -39,10 +41,10 @@ brainVita.Game.prototype = {
 	createBoard: function(){
 		this.add.sprite(0, 0, 'background');
 		this.add.sprite(80, 30, 'board');
-		this.add.sprite(300, 0, 'Timer');
-		this.undoBtn=this.add.button(30, -4, 'Undo-icon', this.undo, this);
-		this.add.button(633, 0, 'pause_icon', this.managePause, this);
-		this.add.button(700, 0, 'cross_icon', this.close, this);
+		this.add.sprite(334, 10, 'Timer');
+		this.undoBtn=this.add.button(6, 5, 'Undo-icon', this.undo, this);
+		this.add.button(683, 1, 'pause_icon', this.managePause, this);
+		this.add.button(736, -1, 'cross_icon', this.close, this);
 		//this.undoBtn.inputEnabled=true;
 	
 		for(i=0; i<7; i++){
@@ -111,7 +113,7 @@ brainVita.Game.prototype = {
         },
 
         onDragStop : function(sprite,pointer) {
-        	this.undoBtn.inputEnabled=true;
+        	
              var iIndex = sprite.iIndex;
              var jIndex = sprite.jIndex;
               this.iPos=iIndex;
@@ -134,6 +136,7 @@ brainVita.Game.prototype = {
 				 	                                    	this.marbles[iIndex+2][jIndex]=this.add.sprite((80+60)+jIndex*70,(50+30)+(iIndex+2)*72,'marble');
 				 	                                        update++;
 				 	                                        this.undoMove=1;
+				 	                                        this.undoBtn.inputEnabled=true;
 				 	                                      } 
 				 	                                     
 				 	                                      
@@ -156,6 +159,7 @@ brainVita.Game.prototype = {
 				 		                                  this.marbles[iIndex][jIndex+2]=this.add.sprite((80+60)+(jIndex+2)*70,(50+30)+iIndex*72,'marble');
 				 	                                      update++;
 				 	                                      this.undoMove=2;
+				 	                                      this.undoBtn.inputEnabled=true;
 				 	                                     } 
 				 	                                    
 				 	                                    }
@@ -175,6 +179,7 @@ brainVita.Game.prototype = {
 				 		                                  this.marbles[iIndex-2][jIndex]=this.add.sprite((60+80)+jIndex*70,(50+30)+(iIndex-2)*72,'marble');
 				 	                                     update++;
 				 	                                     this.undoMove=3;
+				 	                                     this.undoBtn.inputEnabled=true;
 				 	                                     }
 
 				 	    
@@ -197,13 +202,15 @@ brainVita.Game.prototype = {
 				 		                                 this.marbles[iIndex][jIndex-2]=this.add.sprite((80+60)+(jIndex-2)*70,(50+30)+iIndex*72,'marble');
 				 	                                     update++;
 				 	                                     this.undoMove=4;
+				 	                                     this.undoBtn.inputEnabled=true;
 				 	                                     } 
 				 	                                    
 				 	                                    }
 			if (update==0) {
-	             	sprite.reset((80+60)+jIndex*70,(50+30)+iIndex*72);	 	                           
+	             	sprite.reset((80+60)+jIndex*70,(50+30)+iIndex*72);
+	             	this.undoBtn.inputEnabled=false;	 	                           
 			} 	                                    
-			this.inputEnabled	 	                                
+			 	                                
 			this.renderBoard(this.marbles);				 
         },
 
