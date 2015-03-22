@@ -4,7 +4,8 @@ brainVita.Display_highscores.prototype = {
 		// display images
 		this.add.sprite(0, 0, 'highscore');
 		// add the button that will start the game
-		this.add.button(297, 501, 'back', this.back, this);
+		this.add.button(330, 510, 'back_btn', this.back, this,'ba2','ba1','ba3');
+		
 		
 	},
 	back: function() {

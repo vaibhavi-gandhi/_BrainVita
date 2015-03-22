@@ -4,9 +4,9 @@ brainVita.MainMenu.prototype = {
 		// display images
 		this.add.sprite(0, 0, 'Mainmenu');
 		// add the button that will start the game
-		this.add.button(298, 235, 'startButton', this.GameScreen, this,2,0,1);
-		this.add.button(298, 339, 'HelpButton', this.help, this,2,0,1);
-		this.add.button(298, 457, 'highscorebutton', this.highscores, this,2,0,1);
+		this.add.button(298, 235, 'start', this.GameScreen, this,'s1','s0','s2');
+		this.add.button(298, 339, 'help_btn', this.help, this,'h1','h0','h2');
+		this.add.button(298, 457, 'highscore_btn', this.highscores, this,'hs1','hs0','hs2');
 	},
 	/*startGame: function() {
 		// start the Game state
