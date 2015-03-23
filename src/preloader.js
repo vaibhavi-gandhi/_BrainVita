@@ -11,32 +11,13 @@ brainVita.preloader.prototype = {
 		this.load.setPreloadSprite(this.preloadBar);
 		// load images
 		this.load.image('background', 'img/background.png');
-		this.load.image('Mainmenu', 'img/Mainmenu.png');
-		//this.load.spritesheet('startButton', 'img/startButton.png',220,70);
-		 this.game.load.atlasJSONHash('start', 'img/start.png', 'img/start.json');
-		 this.game.load.atlasJSONHash('highscore_btn', 'img/highscore_btn.png', 'img/highscore_btn.json');
-		 this.game.load.atlasJSONHash('tryagain', 'img/tryagain.png', 'img/tryagain.json');
-		 this.game.load.atlasJSONHash('back_btn', 'img/back_btn.png', 'img/back_btn.json');
-		 this.game.load.atlasJSONHash('help_btn', 'img/help_btn.png', 'img/help_btn.json');
-		 this.game.load.atlasJSONHash('quit', 'img/quit.png', 'img/quit.json');
-		 this.game.load.atlasJSONHash('undo_btn', 'img/undo_btn.png', 'img/undo_btn.json');
-		 this.game.load.atlasJSONHash('pause', 'img/pause.png', 'img/pause.json');
-		 this.game.load.atlasJSONHash('cross-icon', 'img/cross-icon.png', 'img/cross-icon.json');
-		
+		this.game.load.atlasJSONHash('spritesheet', 'img/spritesheet.png', 'img/spritesheet.json');
+		this.game.load.atlasJSONHash('text', 'img/text.png', 'img/text.json');
 		this.load.image('helpscreen', 'img/helpscreen.png');
-		this.load.image('highscore', 'img/highscore.png');
-	
+		this.load.image('leaderBoard', 'img/leaderBoard.png');
 		this.load.image('board','img/board.png');
 		this.load.image('marble','img/marble.png');
-		this.load.image('finalscreen','img/finalscreen.png');
-	    this.load.image('Timer','img/Timer.png');
-	    
-	    
-
-
-
-
-		// load spritesheets
+		this.load.image('pausedscreen','img/pausedscreen.png');
 		
 	},
 	create: function(){

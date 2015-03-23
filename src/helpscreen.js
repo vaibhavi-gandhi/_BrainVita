@@ -4,7 +4,7 @@ brainVita.helpscreen.prototype = {
 		// display images
 		this.add.sprite(0, 0, 'helpscreen');
 		// add the button that will start the game
-		this.add.button(330, 510, 'back_btn', this.back, this,'ba2','ba1','ba3');
+		this.add.button(330, 510, 'spritesheet', this.back, this,'ba2','ba1','ba3');
 		
 	},
 	back: function() {

@@ -42,10 +42,10 @@ brainVita.Game.prototype = {
 	createBoard: function(){
 		this.add.sprite(0, 0, 'background');
 		this.add.sprite(80, 30, 'board');
-		this.add.sprite(334, 10, 'Timer');
-		this.undoBtn=this.add.button(6, 5, 'undo_btn', this.undo, this,'u1','u0','u2');
-		this.add.button(683, 1, 'pause', this.managePause, this,'p1','p0','p2');
-		this.add.button(736, 4, 'cross-icon', this.close, this,'cr1','cr0','cr2');
+		this.add.sprite(334, 10, 'spritesheet','Timer');
+		this.undoBtn=this.add.button(6, 5, 'spritesheet', this.undo, this,'u1','u0','u2');
+		this.add.button(683, 1, 'spritesheet', this.managePause, this,'p1','p0','p2');
+		this.add.button(736, 4, 'spritesheet', this.close, this,'cr1','cr0','cr2');
 		//this.undoBtn.inputEnabled=true;
 	
 		for(i=0; i<7; i++){
@@ -124,19 +124,19 @@ brainVita.Game.prototype = {
                  if (iIndex+2<=6 && this.board[iIndex+2][jIndex]==0 && 
 		    	this.board[iIndex+1][jIndex]==1) 
                  {
-                      this.marbles[iIndex][jIndex].tint= Math.random()*0xffffff;
+                      this.marbles[iIndex][jIndex].tint= 0x1f0457;
                  }
                   if (jIndex+2<=6 && this.board[iIndex][jIndex+2]==0 && this.board[iIndex][jIndex+1]==1)
                   {
-                      this.marbles[iIndex][jIndex].tint= Math.random()*0xffffff;
+                      this.marbles[iIndex][jIndex].tint= 0x1f0457;
                   }
                   if (iIndex-2>=0 && this.board[iIndex-2][jIndex]==0 && this.board[iIndex-1][jIndex]==1)
                   {
-                      this.marbles[iIndex][jIndex].tint= Math.random()*0xffffff;
+                      this.marbles[iIndex][jIndex].tint= 0x1f0457;
                   }
                   if (jIndex-2>=0 && this.board[iIndex][jIndex-2]==0  && this.board[iIndex][jIndex-1]==1)
                   {
-                      this.marbles[iIndex][jIndex].tint= Math.random()*0xffffff;
+                      this.marbles[iIndex][jIndex].tint=0x1f0457;
                   }
 
 
@@ -257,7 +257,7 @@ brainVita.Game.prototype = {
 			if (update==0) {
 	             	sprite.reset((80+60)+jIndex*70,(50+30)+iIndex*72);
 	             	this.undoBtn.inputEnabled=false;
-	             	this.undoBtn.visible=true;	 	                           
+	             	this.undoBtn.visible=false;	 	                           
 			} 	                                    
 			 	                                
 			this.renderBoard(this.marbles);				 
@@ -364,6 +364,9 @@ brainVita.Game.prototype = {
            
         undo:function()
         {
+        	/*if (this.update==0) {
+        		return;
+        	}*/
         	if(this.undoMove==1)
         	{
         		  this.board[this.iPos+2][this.jPos]=0;
@@ -422,17 +425,14 @@ brainVita.Game.prototype = {
         graphicOverlay.drawRect(0,0, 800, 600);
         graphicOverlay.endFill();
         this.overlay = this.game.add.image(-10,-10,graphicOverlay.generateTexture());
+        this.image= this.add.sprite(150, 90, 'pausedscreen');
         this.overlay.inputEnabled = true;
-        // add proper informational text
-        pausedText = this.add.text(this.world.centerX,250, "Game paused.\nTap anywhere to continue.", this._fontStyle1);
-        pausedText.anchor.setTo(0.5, 0.5);
         // set event listener for the user's click/tap the screen
         this.input.onDown.add(function(){
-            // remove the pause text
-        pausedText.destroy();
-            // unpause the game
+        // unpause the game
         this.game.paused = false;
         this.overlay.destroy();
+        this.image.destroy();
         }, this);
     },
 
