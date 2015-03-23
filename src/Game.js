@@ -117,7 +117,7 @@ brainVita.Game.prototype = {
        
 
         },
-        over:function(sprite,pointer)
+        over:function(sprite)
         {
         	 var iIndex = sprite.iIndex;
              var jIndex = sprite.jIndex;
@@ -142,7 +142,7 @@ brainVita.Game.prototype = {
 
         },
 
-        out:function(sprite,pointer)
+        out:function(sprite)
         {
         	 var iIndex = sprite.iIndex;
              var jIndex = sprite.jIndex;
@@ -254,11 +254,12 @@ brainVita.Game.prototype = {
 			if (update==0) {
 	             	sprite.reset((80+60)+jIndex*70,(50+30)+iIndex*72);
 	             	this.undoBtn.inputEnabled=true;
-	             	this.undoBtn.visible=true;	 	                           
+	             	 	                           
 			}else
 			{
 				this.iPos=iIndex;
 	         	this.jPos=jIndex;
+	         	this.undoBtn.visible=true;	
 			} 	                                    
 			 	                                
 			this.renderBoard(this.marbles);				 
